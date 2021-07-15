@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content%}
+
+<body>
+
+  <form id="loginform" action="{% url 'register_d' %}" method=="POST">
+  <div class="container">
+    <h1>Login</h1>
+    <p>Please Enter Email and password.</p>
+    <hr>
+
+    <label for="email"><b>Email</b></label>
+    <input type="email" placeholder="Enter Email" name="email" id="email" required>
+    <hr>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
+    <hr>
+    <div id="result"></div>
+    <button type="submit" class="registerbtn">Login</button>
+  </div>
+
+  <div class="container signin">
+    <p>New here??  <a href="{% url 'register_d' %}">Register</a>.</p>
+  </div>
+</form>
+
+<script>
+
+$( "#loginform" ).submit(function( event ) {
+
+  event.preventDefault();
+
+
+  var $form = $( this ),
+    email = $form.find( "input[name='email']" ).val(),
+    password=$form.find( "input[name='psw']" ).val(),
+    data={
+      "email": email,"password": password
+    }
+    url = "http://127.0.0.1:8000/api/login";
+    $.ajax({
+     type: "POST",
+     url: url,
+     data: data,
+     success: function(data){
+       document.location.href ="{% url 'first_page' %}"
+
+     },
+     error: function(error_data){
+          $( "#result" ).empty().append(error_data.responseJSON.detail );
+     },
+   });
+});
+</script>
+
+</body>
+
+
+{% endblock content %}
